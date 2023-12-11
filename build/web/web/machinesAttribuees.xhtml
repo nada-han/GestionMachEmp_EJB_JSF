@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition template="/template.xhtml">
+
+        <ui:define name="title">
+            <h:outputText value="#{bundle.ListMachineTitle}" />
+        </ui:define>
+
+        <ui:define name="body">
+            <h:form>
+                <p:outputLabel value="Sélectionner un employé : " /> <br />
+                <p:selectOneMenu value="#{employeController.selected}">
+                    <!-- Charger la liste des employés depuis la base de données -->
+                    <f:selectItems value="#{employeController.itemsAvailableSelectOne}" var="employeItem" itemValue="#{employeItem}" />
+                    <p:ajax listener="#{employeController.chargerMachinesAttribuees}" update="machinesAttribuees" />
+                </p:selectOneMenu>
+
+                <p:dataTable id="machinesAttribuees" value="#{employeController.machinesAttribuees}" var="machine">
+                    <!-- Afficher les détails des machines attribuées -->
+                    <p:column headerText="Référence">#{machine.reference}</p:column>
+                    <p:column headerText="Marque">#{machine.marque}</p:column>
+                    <!-- ... autres colonnes ... -->
+                </p:dataTable>
+            </h:form><br />
+           <p:panel rendered="#{not empty employeController.chartModel}">
+    <p:chart type="bar" model="#{employeController.chartModel}" style="width:100%; height:300px" />
+</p:panel>
+
+
+
+        </ui:define>
+    </ui:composition>
+</html>
